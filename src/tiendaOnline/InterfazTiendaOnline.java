@@ -1,5 +1,6 @@
 package tiendaOnline;
 
+//Importaciones de las librerías de Swing y AWT
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,14 +20,21 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * La clase InterfazTiendaOnline representa la interfaz de la tienda online.
+ */
 public class InterfazTiendaOnline extends JFrame {
 
+	// Declaraciones de variables y componentes de la interfaz
 	private Usuario usuarioSesion;
 	//private JPanel panelCatalogo;
 	private JPanel panelCarrito;
 	private JLabel lblCarrito;
 	private List<Producto> listaProductos;
 
+	 /**
+     * Constructor de la interfaz de la tienda online.
+     */
 	public InterfazTiendaOnline() {
 		
 		listaProductos = new ArrayList<>();
@@ -37,13 +45,13 @@ public class InterfazTiendaOnline extends JFrame {
         listaProductos.add(pcPremontado);
         listaProductos.add(cpu);
         
-		setTitle("www.Computer tech.com");
+		setTitle("www.Computer-tech.com");
 		setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Panel superior para los elementos de la izquierda-medio
         JPanel panelBuscar = new JPanel();
-        panelBuscar.setLayout(new BoxLayout(panelBuscar, BoxLayout.X_AXIS));
+        
         add(panelBuscar);
 
         // Campo de texto para la búsqueda
@@ -79,6 +87,12 @@ public class InterfazTiendaOnline extends JFrame {
 		setVisible(true);
 	}
 
+	 /**
+     * Muestra un menú emergente en la posición dada.
+     *
+     * @param comp El componente asociado al menú.
+     * @param pos  La posición en la pantalla donde se mostrará el menú.
+     */
 	private void mostrarMenu(Component comp, Point pos) {
 		JPopupMenu menu = new JPopupMenu();
 
@@ -112,6 +126,11 @@ public class InterfazTiendaOnline extends JFrame {
 		menu.show(comp, pos.x, pos.y - menu.getHeight());
 	}
 
+	/**
+     * Muestra un menú emergente en una posición específica.
+     *
+     * @param pos La posición en la pantalla donde se mostrará el menú.
+     */
 	private void mostrarMenu(Point pos) {
 		JPopupMenu menu = new JPopupMenu();
 
@@ -145,6 +164,9 @@ public class InterfazTiendaOnline extends JFrame {
 		menu.show(this, pos.x, pos.y);
 	}
 
+	/**
+     * Muestra una ventana para el inicio de sesión.
+     */
 	private void mostrarVentanaInicioSesion() {
 		JFrame frameInicioSesion = new JFrame("Inicio de Sesión");
 		frameInicioSesion.setSize(300, 200);
@@ -185,6 +207,9 @@ public class InterfazTiendaOnline extends JFrame {
 		frameInicioSesion.setVisible(true);
 	}
 
+	/**
+     * Muestra una ventana para el registro de un nuevo usuario.
+     */
 	private void mostrarVentanaRegistro() {
 		JFrame frameRegistro = new JFrame("Registro de Usuario");
 		frameRegistro.setSize(300, 200);
@@ -222,17 +247,29 @@ public class InterfazTiendaOnline extends JFrame {
 		frameRegistro.setVisible(true);
 	}
 
+	/**
+     * Registra un nuevo usuario con el nombre de usuario y contraseña dados.
+     *
+     * @param nombreUsuario El nombre de usuario a registrar.
+     * @param contrasena    La contraseña del nuevo usuario.
+     */
 	private void registrarUsuario(String nombreUsuario, String contrasena) {
 		Usuario nuevoUsuario = new Usuario(nombreUsuario, contrasena);
 		almacenamientoUsuario.agregarUsuario(nuevoUsuario);
 		JOptionPane.showMessageDialog(null, "¡Usuario registrado exitosamente!");
 	}
 
+	/**
+     * Muestra el catálogo de productos en la interfaz.
+     */
 	private void mostrarCatalogo() {
 		// Lógica para mostrar los productos en el catálogo
 		// Puedes usar botones u otros componentes para que el usuario pueda interactuar con los productos
 	}
 
+	/**
+     * Muestra los elementos en el carrito de compras.
+     */
 	private void mostrarCarrito() {
 		panelCarrito.removeAll(); // Limpia el panel antes de mostrar los elementos del carrito
 		panelCarrito.setLayout(new BoxLayout(panelCarrito, BoxLayout.Y_AXIS));
@@ -255,6 +292,9 @@ public class InterfazTiendaOnline extends JFrame {
 		panelCarrito.repaint();
 	}
 
+	/**
+     * Muestra una ventana con el contenido del carrito de compras.
+     */
 	private void mostrarVentanaCarrito() {
 		JFrame ventanaCarrito = new JFrame("Carrito de Compras");
 		ventanaCarrito.setSize(300, 300);
@@ -268,6 +308,11 @@ public class InterfazTiendaOnline extends JFrame {
 		ventanaCarrito.setVisible(true);
 	}
 
+	/**
+     * Busca un producto utilizando una palabra clave.
+     *
+     * @param palabraClave La palabra clave para buscar un producto.
+     */
 	public void buscarProducto(String palabraClave) {
 		boolean encontrado = false;
 

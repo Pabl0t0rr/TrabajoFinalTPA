@@ -1,79 +1,109 @@
 package tiendaOnline;
 
+/**
+ * La clase Producto representa un artículo disponible para la venta en la tienda online.
+ */
 public class Producto {
-	private String nombre;
-	private double precio;
-	private int cantidadEnStock;
-	private String descripcion;
+    private String nombre;
+    private double precio;
+    private int cantidadEnStock;
+    private String descripcion;
 
-	public Producto(String nombre, double precio, int cantidadEnStock,String descripcion) {
-		this.nombre = nombre;
-		this.precio = precio;
-		this.cantidadEnStock = cantidadEnStock;
-		this.descripcion= descripcion;
-	}
+    /**
+     * Constructor de la clase Producto.
+     *
+     * @param nombre          El nombre del producto.
+     * @param precio          El precio del producto.
+     * @param cantidadEnStock La cantidad disponible en stock del producto.
+     * @param descripcion     La descripción del producto.
+     */
+    public Producto(String nombre, double precio, int cantidadEnStock, String descripcion) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.cantidadEnStock = cantidadEnStock;
+        this.descripcion = descripcion;
+    }
 
-	// Getters y Setters para los atributos nombre, precio y cantidadEnStock
-	public String getNombre() {
-		return this.nombre;
-	}
+    // Getters y Setters para los atributos nombre, precio, cantidadEnStock y descripcion
+    public String getNombre() {
+        return this.nombre;
+    }
 
-	public double getPrecio() {
-		return this.precio;
-	}
+    public double getPrecio() {
+        return this.precio;
+    }
 
-	public int getCantidadEnStock() {
-		return this.cantidadEnStock;
-	}
+    public int getCantidadEnStock() {
+        return this.cantidadEnStock;
+    }
 
-	public String getDescripcion(){
-		return this.descripcion;
-	}
+    public String getDescripcion() {
+        return this.descripcion;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public void setPrecio(double precio) {
-		this.precio = precio;
-	}
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
 
-	public void setCantidadEnStock(int cantidadEnStock) {
-		this.cantidadEnStock = cantidadEnStock;
-	}
+    public void setCantidadEnStock(int cantidadEnStock) {
+        this.cantidadEnStock = cantidadEnStock;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void agregarStock(int cantidad) {
-		// Lógica para aumentar la cantidad de stock del producto
-		this.cantidadEnStock += cantidad;
-	}
+    /**
+     * Aumenta la cantidad de stock del producto.
+     *
+     * @param cantidad La cantidad a agregar al stock del producto.
+     */
+    public void agregarStock(int cantidad) {
+        this.cantidadEnStock += cantidad;
+    }
 
-	public void restarStock(int cantidad) {
-		// Lógica para reducir la cantidad de stock del producto
-		this.cantidadEnStock -= cantidad;
-	}
+    /**
+     * Reduce la cantidad de stock del producto.
+     *
+     * @param cantidad La cantidad a restar del stock del producto.
+     */
+    public void restarStock(int cantidad) {
+        this.cantidadEnStock -= cantidad;
+    }
 
-	public void actualizarPrecio(double nuevoPrecio) {
-		// Lógica para cambiar el precio del producto
-		this.precio = nuevoPrecio;
-	}
+    /**
+     * Actualiza el precio del producto.
+     *
+     * @param nuevoPrecio El nuevo precio a establecer para el producto.
+     */
+    public void actualizarPrecio(double nuevoPrecio) {
+        this.precio = nuevoPrecio;
+    }
 
-	public void mostrarInformacion() {
-		// Método para mostrar la información del producto
-		System.out.println("Nombre: " + this.nombre);
-		System.out.println("Precio: " + this.precio);
-		System.out.println("Cantidad en Stock: " + this.cantidadEnStock);
-		System.out.println("Descripcion del producto : "+ this.descripcion);
-	}
+    /**
+     * Muestra la información del producto por consola.
+     */
+    public void mostrarInformacion() {
+        System.out.println("Nombre: " + this.nombre);
+        System.out.println("Precio: " + this.precio);
+        System.out.println("Cantidad en Stock: " + this.cantidadEnStock);
+        System.out.println("Descripción del producto: " + this.descripcion);
+    }
 
-	public boolean buscarPorPalabra(String palabraBuscada) {
-		if (nombre.toLowerCase().contains(palabraBuscada.toLowerCase())) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Busca una palabra clave en el nombre del producto.
+     *
+     * @param palabraBuscada La palabra a buscar en el nombre del producto.
+     * @return true si la palabra buscada se encuentra en el nombre del producto, de lo contrario false.
+     */
+    public boolean buscarPorPalabra(String palabraBuscada) {
+        if (nombre.toLowerCase().contains(palabraBuscada.toLowerCase())) {
+            return true;
+        }
+        return false;
+    }
 }
-
