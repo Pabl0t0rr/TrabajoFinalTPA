@@ -11,17 +11,6 @@ public class pagoTarjeta extends Pago {
         this.codigoSeguridad = codigoSeguridad;
     }
 
-    @Override
-    public void procesarPago() {
-        // Lógica para procesar el pago con tarjeta
-        // Aquí se simula una validación básica de la tarjeta y se muestra un mensaje
-        if (validarTarjeta()) {
-            System.out.println("¡Pago procesado exitosamente con la tarjeta " + this.numeroTarjeta + "!");
-        } else {
-            System.out.println("Error: No se pudo procesar el pago. Por favor, revise la información de la tarjeta.");
-        }
-    }
-
     private boolean validarTarjeta() {
         // Lógica para validar la tarjeta (simulada)
         // Aquí podrías integrarte con una pasarela de pagos real para la validación
@@ -32,5 +21,16 @@ public class pagoTarjeta extends Pago {
         // Lógica para validar la fecha de vencimiento (simulada)
         // Aquí se podría verificar que la fecha no esté pasada
         return true; // Suponiendo que la fecha de vencimiento es válida
+    }
+    
+    @Override
+    public void procesarPago() {
+        // Lógica para procesar el pago con tarjeta
+        // Aquí se simula una validación básica de la tarjeta y se muestra un mensaje
+        if (validarTarjeta()) {
+            System.out.println("¡Pago procesado exitosamente con la tarjeta " + this.numeroTarjeta + "!");
+        } else {
+            System.out.println("Error: No se pudo procesar el pago. Por favor, revise la información de la tarjeta.");
+        }
     }
 }
