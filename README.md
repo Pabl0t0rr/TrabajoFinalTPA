@@ -64,7 +64,8 @@ classDiagram
         - precio: double
         - cantidadEnStock: int
         - descripcion: String
-        + Producto(nombre: String, precio: double, cantidadEnStock: int, descripcion: String)
+        -categoria: String
+        + Producto(nombre: String, precio: double, cantidadEnStock: int, descripcion: String,categoria: String)
         + agregarStock(cantidad: int): void
         + restarStock(cantidad: int): void
         + actualizarPrecio(nuevoPrecio: double): void
@@ -84,8 +85,17 @@ classDiagram
         + Usuario(nombreUsuario: String, contrasena: String)
     }
 
+    class PCPremontado{
+        +PCPremontado(String nombre, double precio, int stock, String descripcion)
+    }
+
+    class Pieza{
+        +Pieza(String nombre, double precio, int stock, String descripcion)
+    }
 Usuario --|> almacenamientoUsuario
 Producto --|> carritoCompra
+Producto --|> PCPremontado
+Producto --|> Pieza
 carritoCompra --> Compra: utiliza
 Compra --> Pago: utiliza
 carritoCompra --> seguimientoPedido: utiliza
