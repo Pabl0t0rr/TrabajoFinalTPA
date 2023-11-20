@@ -12,8 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,22 +27,24 @@ public class InterfazTiendaOnline extends JFrame {
 	private Usuario usuarioSesion;
 	private JPanel panelCatalogo;
 	private JPanel panelCarrito;
-	private JLabel lblCarrito;
 	private List<Producto> listaProductos;
+	private List<Producto> productosEnCarrito = new ArrayList<>();
 
 	/**
 	 * Constructor de la interfaz de la tienda online.
 	 */
 	public InterfazTiendaOnline() {
 		listaProductos = new ArrayList<>();
+		productosEnCarrito = new ArrayList<>();
 
-		 // Productos de prueba
-        Producto pcPremontado = new PCPremontado("PC Gaming", 1200.0, 9, "Potente PC para juegos");
-        Producto cpu = new Pieza("Procesador Intel Core i7", 300.0, 10, "Procesador potente para rendimiento");
-        Producto cpu1 = new Pieza("Procesador Intel Core i5", 150.0, 10, "Procesador de potencia media");
-        listaProductos.add(pcPremontado);
-        listaProductos.add(cpu);
-        listaProductos.add(cpu1);
+
+		// Productos de prueba
+		Producto pcPremontado = new PCPremontado("PC Gaming", 1200.0, 9, "Potente PC para juegos");
+		Producto cpu = new Pieza("Procesador Intel Core i7", 300.0, 10, "Procesador potente para rendimiento");
+		Producto cpu1 = new Pieza("Procesador Intel Core i5", 150.0, 10, "Procesador de potencia media");
+		listaProductos.add(pcPremontado);
+		listaProductos.add(cpu);
+		listaProductos.add(cpu1);
 
 		setTitle("www.Computer-tech.com");
 		setSize(800, 600);
@@ -88,8 +88,8 @@ public class InterfazTiendaOnline extends JFrame {
 		panelPiezas.setLayout(new BoxLayout(panelPiezas, BoxLayout.Y_AXIS));
 
 		// Agregar etiquetas a los paneles
-		JLabel lblPCPremontados = new JLabel("PC Premontados");
-		JLabel lblPiezas = new JLabel("Piezas");
+		JLabel lblPCPremontados = new JLabel("PC Premontados: ");
+		JLabel lblPiezas = new JLabel("Piezas: ");
 
 		panelPCPremontados.add(lblPCPremontados);
 		panelPiezas.add(lblPiezas);
@@ -98,11 +98,25 @@ public class InterfazTiendaOnline extends JFrame {
 		for (Producto producto : listaProductos) {
 			if (producto.getCategoria().equals("PC Premontado")) {
 				JButton btnProducto = new JButton(producto.getNombre());
-				// Puedes agregar un ActionListener para manejar eventos de clic en el botón
+				btnProducto.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						mostrarDetallesProducto(producto);
+					}
+				});
 				panelPCPremontados.add(btnProducto);
-			} else if (producto.getCategoria().equals("Pieza")) {
+			}
+		}
+		// Dentro del bucle para Piezas
+		for (Producto producto : listaProductos) {
+			if (producto.getCategoria().equals("Pieza")) {
 				JButton btnProducto = new JButton(producto.getNombre());
-				// Puedes agregar un ActionListener para manejar eventos de clic en el botón
+				btnProducto.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						mostrarDetallesProducto(producto);
+					}
+				});
 				panelPiezas.add(btnProducto);
 			}
 		}
@@ -120,45 +134,6 @@ public class InterfazTiendaOnline extends JFrame {
 		add(panelCarrito, BorderLayout.SOUTH);
 
 		setVisible(true);
-	}
-
-	/**
-	 * Muestra un menú emergente en la posición dada.
-	 *
-	 * @param comp El componente asociado al menú.
-	 * @param pos  La posición en la pantalla donde se mostrará el menú.
-	 */
-	private void mostrarMenu(Component comp, Point pos) {
-		JPopupMenu menu = new JPopupMenu();
-
-		JMenuItem itemInicioSesion = new JMenuItem("Iniciar Sesión");
-		itemInicioSesion.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mostrarVentanaInicioSesion();
-			}
-		});
-		menu.add(itemInicioSesion);
-
-		JMenuItem itemRegistrarse = new JMenuItem("Registrarse");
-		itemRegistrarse.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mostrarVentanaRegistro();
-			}
-		});
-		menu.add(itemRegistrarse);
-
-		JMenuItem itemCarrito = new JMenuItem("Ver Carrito");
-		itemCarrito.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mostrarCarrito();
-			}
-		});
-		menu.add(itemCarrito);
-
-		menu.show(comp, pos.x, pos.y - menu.getHeight());
 	}
 
 	/**
@@ -182,6 +157,7 @@ public class InterfazTiendaOnline extends JFrame {
 		itemVerCarrito.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Muestra el carrito en una ventana separada
 				mostrarVentanaCarrito();
 			}
 		});
@@ -215,7 +191,7 @@ public class InterfazTiendaOnline extends JFrame {
 					JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso para el usuario " + nombreUsuario + "!");
 					// Lógica para mostrar catálogo, etc.
 					frameInicioSesion.dispose();
-					mostrarCatalogo(); // Método a implementar
+
 				} else {
 					JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos. Inicio de sesión fallido.");
 				}
@@ -298,118 +274,166 @@ public class InterfazTiendaOnline extends JFrame {
 	}
 
 	/**
-	 * Muestra el catálogo de productos en la interfaz.
-	 */
-	private void mostrarCatalogo() {
-		panelCatalogo = new JPanel();
-		panelCatalogo.setLayout(new GridLayout(1, 2)); // Divide el panel en 2 columnas
-
-		// Columna izquierda para PC premontados
-		JPanel panelPCPremontados = new JPanel();
-		panelPCPremontados.setBorder(BorderFactory.createTitledBorder("PC Premontados"));
-		panelPCPremontados.setLayout(new BoxLayout(panelPCPremontados, BoxLayout.Y_AXIS));
-
-		for (Producto producto : listaProductos) {
-			if (producto instanceof PCPremontado) {
-				JButton btnProducto = new JButton(producto.getNombre());
-				btnProducto.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// Lógica para manejar la selección de un producto (puede mostrar detalles, agregar al carrito, etc.)
-					}
-				});
-				panelPCPremontados.add(btnProducto);
-			}
-		}
-
-		// Columna derecha para piezas
-		JPanel panelPiezas = new JPanel();
-		panelPiezas.setBorder(BorderFactory.createTitledBorder("Piezas"));
-		panelPiezas.setLayout(new BoxLayout(panelPiezas, BoxLayout.Y_AXIS));
-
-		for (Producto producto : listaProductos) {
-			if (producto instanceof Pieza) {
-				JButton btnProducto = new JButton(producto.getNombre());
-				btnProducto.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// Lógica para manejar la selección de un producto (puede mostrar detalles, agregar al carrito, etc.)
-					}
-				});
-				panelPiezas.add(btnProducto);
-			}
-		}
-
-		// Agregar las columnas al panelCatalogo
-		panelCatalogo.add(panelPCPremontados);
-		panelCatalogo.add(panelPiezas);
-
-		// Agregar el panelCatalogo al contenido principal
-		add(panelCatalogo, BorderLayout.CENTER);
-
-		// Actualizar la interfaz
-		revalidate();
-		repaint();
-	}
-
-	/**
-	 * Muestra los elementos en el carrito de compras.
-	 */
-	private void mostrarCarrito() {
-		panelCarrito.removeAll(); // Limpia el panel antes de mostrar los elementos del carrito
-		panelCarrito.setLayout(new BoxLayout(panelCarrito, BoxLayout.Y_AXIS));
-
-		lblCarrito = new JLabel("Elementos en el carrito:");
-		panelCarrito.add(lblCarrito);
-
-		// Agrega aquí la lógica para mostrar los elementos del carrito
-		// por ejemplo, iterar sobre los elementos del carrito y mostrarlos en el panelCarrito
-
-		// Por ahora, añadimos un ejemplo estático de producto en el carrito
-		JLabel producto1 = new JLabel("Producto 1");
-		JLabel producto2 = new JLabel("Producto 2");
-		panelCarrito.add(producto1);
-		panelCarrito.add(producto2);
-
-		// ...
-
-		panelCarrito.revalidate(); // Actualiza el panel para mostrar los cambios
-		panelCarrito.repaint();
-	}
-
-	/**
 	 * Muestra una ventana con el contenido del carrito de compras.
 	 */
 	private void mostrarVentanaCarrito() {
-		JFrame ventanaCarrito = new JFrame("Carrito de Compras");
-		ventanaCarrito.setSize(300, 300);
-		ventanaCarrito.setLocationRelativeTo(null);
-		ventanaCarrito.setLayout(new BorderLayout());
+	    JFrame ventanaCarrito = new JFrame("Carrito de Compra");
+	    ventanaCarrito.setSize(400, 300);
+	    ventanaCarrito.setLayout(new BorderLayout());
 
-		JPanel panelProductos = new JPanel();
-		// Aquí deberías añadir lógica para mostrar los productos del carrito en panelProductos
+	    JPanel panelProductos = new JPanel();
+	    panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
 
-		ventanaCarrito.add(panelProductos, BorderLayout.CENTER);
-		ventanaCarrito.setVisible(true);
+	    // Mostrar los productos del carrito directamente en la ventana emergente
+	    for (Producto producto : productosEnCarrito) {
+	        // Etiqueta para mostrar el nombre y la cantidad del producto
+	        JLabel lblProducto = new JLabel(producto.getNombre() + " - Cantidad: " + producto.getCantidadEnStock());
+
+	        // Panel para organizar la etiqueta del producto y los botones de añadir y eliminar
+	        JPanel panelProducto = new JPanel(new BorderLayout());
+	        panelProducto.add(lblProducto, BorderLayout.CENTER);
+
+	        // Botón para decrementar la cantidad del producto en el carrito
+	        JButton btnEliminar = new JButton("-");
+	        btnEliminar.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                quitarDelCarrito(producto);
+	                ventanaCarrito.dispose();
+	                mostrarVentanaCarrito();
+	            }
+	        });
+	        panelProducto.add(btnEliminar, BorderLayout.EAST);
+
+	        panelProductos.add(panelProducto);
+	    }
+
+	    ventanaCarrito.add(panelProductos, BorderLayout.CENTER);
+	    ventanaCarrito.setVisible(true);
 	}
 
 	/**
-	 * Busca un producto utilizando una palabra clave.
+	 * Busca un producto utilizando una palabra clave y muestra los resultados en una ventana.
 	 *
 	 * @param palabraClave La palabra clave para buscar un producto.
 	 */
 	public void buscarProducto(String palabraClave) {
-		boolean encontrado = false;
+		List<Producto> productosEncontrados = new ArrayList<>();
 
 		for (Producto producto : listaProductos) {
 			if (producto.buscarPorPalabra(palabraClave)) {
-				producto.mostrarInformacion();
-				encontrado = true;
+				productosEncontrados.add(producto);
 			}
 		}
 
-		if (!encontrado) {
+		if (!productosEncontrados.isEmpty()) {
+			mostrarResultadosBusqueda(productosEncontrados);
+		} else {
 			JOptionPane.showMessageDialog(null, "No hay productos que coincidan con la palabra clave: " + palabraClave);
 		}
 	}
+
+	/**
+	 * Muestra una ventana con los resultados de la búsqueda.
+	 *
+	 * @param productosEncontrados La lista de productos encontrados.
+	 */
+	private void mostrarResultadosBusqueda(List<Producto> productosEncontrados) {
+		JFrame ventanaResultados = new JFrame("Resultados de Búsqueda");
+		ventanaResultados.setSize(400, 300);
+		ventanaResultados.setLayout(new BoxLayout(ventanaResultados.getContentPane(), BoxLayout.Y_AXIS));
+
+		JLabel lblTitulo = new JLabel("Resultados de Búsqueda:");
+		ventanaResultados.add(lblTitulo);
+
+		for (Producto producto : productosEncontrados) {
+			JButton btnProducto = new JButton(producto.getNombre());
+			btnProducto.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					mostrarDetallesProducto(producto);
+				}
+			});
+			ventanaResultados.add(btnProducto);
+		}
+
+		ventanaResultados.setVisible(true);
+	}
+
+	/**
+	 * Muestra una ventana con los detalles del producto.
+	 *
+	 * @param producto El producto del cual se mostrarán los detalles.
+	 */
+	private void mostrarDetallesProducto(Producto producto) {
+		JFrame ventanaDetalles = new JFrame("Detalles del Producto");
+		ventanaDetalles.setSize(400, 300);
+		ventanaDetalles.setLayout(new BorderLayout());
+
+		// Panel para mostrar la información del producto
+		JPanel panelInformacion = new JPanel();
+		panelInformacion.setLayout(new BoxLayout(panelInformacion, BoxLayout.Y_AXIS));
+
+		JLabel lblNombre = new JLabel("Nombre: " + producto.getNombre());
+		JLabel lblPrecio = new JLabel("Precio: $" + producto.getPrecio());
+		JLabel lblStock = new JLabel("Stock: " + producto.getCantidadEnStock());
+		JLabel lblDescripcion = new JLabel("Descripción: " + producto.getDescripcion());
+
+		panelInformacion.add(lblNombre);
+		panelInformacion.add(lblPrecio);
+		panelInformacion.add(lblStock);
+		panelInformacion.add(lblDescripcion);
+
+		ventanaDetalles.add(panelInformacion, BorderLayout.CENTER);
+
+		// Panel para los botones de compra y agregar al carrito
+		JPanel panelBotones = new JPanel(new FlowLayout());
+
+		JButton btnCompra = new JButton("Comprar");
+		btnCompra.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Lógica para realizar la compra (puede actualizar el stock, generar factura, etc.)
+				JOptionPane.showMessageDialog(null, "Compra realizada: " + producto.getNombre());
+			}
+		});
+
+		JButton btnAgregarCarrito = new JButton("Agregar al Carrito");
+		btnAgregarCarrito.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				agregarAlCarrito(producto);
+			}
+		});
+
+		panelBotones.add(btnCompra);
+		panelBotones.add(btnAgregarCarrito);
+
+		ventanaDetalles.add(panelBotones, BorderLayout.SOUTH);
+
+		ventanaDetalles.setVisible(true);
+	}
+
+	/**
+	 * Agrega un producto al carrito.
+	 *
+	 * @param producto El producto a agregar al carrito.
+	 */
+	private void agregarAlCarrito(Producto producto) {
+		// Agregar el producto a la lista de productos en el carrito
+		productosEnCarrito.add(producto);
+		JOptionPane.showMessageDialog(null, "Producto añadido al carrito: " + producto.getNombre());
+	}
+
+	/**
+	 * Quita un producto del carrito.
+	 *
+	 * @param producto El producto a quitar del carrito.
+	 */
+	private void quitarDelCarrito(Producto producto) {
+		productosEnCarrito.remove(producto);
+		JOptionPane.showMessageDialog(null, "Producto eliminado del carrito: " + producto.getNombre());
+	}
+
+
 }
