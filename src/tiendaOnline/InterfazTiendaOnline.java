@@ -38,14 +38,40 @@ public class InterfazTiendaOnline extends JFrame {
 		productosEnCarrito = new ArrayList<>();
 
 
-		// Productos de prueba
+		//Premontados
 		Producto pcPremontado = new PCPremontado("PC Gaming", 1200.0, 9, "Potente PC para juegos");
+		Producto pcPremontado1 = new PCPremontado("PC Gaming", 800.0, 7, "PC con buen rendimiento, para trabajar en casa");		
+		listaProductos.add(pcPremontado);
+		listaProductos.add(pcPremontado1);
+		
+		//Procesadores
 		Producto cpu = new Pieza("Procesador Intel Core i7", 300.0, 10, "Procesador potente para rendimiento");
 		Producto cpu1 = new Pieza("Procesador Intel Core i5", 150.0, 10, "Procesador de potencia media");
-		listaProductos.add(pcPremontado);
 		listaProductos.add(cpu);
 		listaProductos.add(cpu1);
-
+		
+		/*
+		//Placa Base
+		Producto Pb = new Pieza("Placa Base",  300.0,7,"MSI MPG B550 GAMING PLUS");
+		Producto Pb1 = new Pieza("Placa Base",  300.0,7,"ASUS ROG STRIX Z790-F GAMING WIFI");
+		listaProductos.add(Pb);
+		listaProductos.add(Pb1);
+		
+		//RAM
+		Producto RAM = new Pieza("RAM con RGB", 300.0, 10, "Corsair Vengeance RGB DDR5 6000MHz PC5-48000 32GB 2x16GB CL36 Negra");
+		Producto RAM1 = new Pieza("RAM", 150.0, 10, "Kingston FURY Beast DDR4 3200 MHz 16GB 2x8GB CL16");
+		listaProductos.add(RAM);
+		listaProductos.add(RAM1);
+		
+		//Graficas
+		Producto grafica = new Pieza("Procesador Intel Core i7", 300.0, 10, "MSI GeForce RTX 4080 VENTUS 3X E OC 16GB GDDR6X DLSS3");
+		Producto grafica1 = new Pieza("Procesador Intel Core i5", 150.0, 10, "MSI AMD Radeon RX 6650 XT GAMING X 8GB GDDR6");
+		listaProductos.add(grafica);
+		listaProductos.add(grafica1);
+		
+		//
+		*/
+		
 		setTitle("www.Computer-tech.com");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -189,7 +215,6 @@ public class InterfazTiendaOnline extends JFrame {
 
 				if (usuarioSesion != null && usuarioSesion.getContrasena().equals(contrasena)) {
 					JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso para el usuario " + nombreUsuario + "!");
-					// Lógica para mostrar catálogo, etc.
 					frameInicioSesion.dispose();
 
 				} else {
@@ -548,5 +573,5 @@ public class InterfazTiendaOnline extends JFrame {
 		return new pagoTarjeta(numeroTarjeta, fechaVencimiento, codigoSeguridad);
 	}
 
-
+	
 }
