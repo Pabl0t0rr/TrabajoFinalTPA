@@ -8,6 +8,7 @@ import java.util.List;
  * La clase almacenamientoUsuario gestiona el almacenamiento y recuperación de usuarios en la tienda online.
  */
 public class almacenamientoUsuario implements Serializable {
+	
     private static List<Usuario> listaUsuarios = new ArrayList<>();
 
     /**

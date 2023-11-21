@@ -1,7 +1,5 @@
 package tiendaOnline;
 
-//Importaciones de las librerías de Swing y AWT
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * La clase InterfazTiendaOnline representa la interfaz de la tienda online.
@@ -25,7 +26,6 @@ public class InterfazTiendaOnline extends JFrame {
 
 	// Declaraciones de variables y componentes de la interfaz
 	private Usuario usuarioSesion;
-	private JPanel panelCatalogo;
 	private JPanel panelCarrito;
 	private List<Producto> listaProductos;
 	private List<Producto> productosEnCarrito = new ArrayList<>();
@@ -272,44 +272,80 @@ public class InterfazTiendaOnline extends JFrame {
 		almacenamientoUsuario.agregarUsuario(nuevoUsuario);
 		JOptionPane.showMessageDialog(null, "¡Usuario registrado exitosamente!");
 	}
-
+	
+	/**
+	 * Registra un nuevo usuario con el nombre de usuario y contraseña dados en la base de datos.
+	 *
+	 * @param nombreUsuario El nombre de usuario a registrar.
+	 * @param contrasena    La contraseña del nuevo usuario.
+	 */
+	private void registrarUsuarioEnBD(String nombreUsuario, String contrasena) {
+	    // Utiliza la conexión a la base de datos para registrar el usuario
+	    try (Connection conexion = new Conexion().conectar())  {
+	        String consulta = "INSERT INTO usuarios (nombre_usuario, contrasena) VALUES (?, ?)";
+	        try (PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
+	            pstmt.setString(1, nombreUsuario);
+	            pstmt.setString(2, contrasena);
+	            pstmt.executeUpdate();
+	        }
+	        JOptionPane.showMessageDialog(null, "¡Usuario registrado exitosamente!");
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();  // Imprimir detalles de la excepción en la consola
+	        JOptionPane.showMessageDialog(null, "Error al registrar el usuario en la base de datos.");
+	    }
+	}
+	
 	/**
 	 * Muestra una ventana con el contenido del carrito de compras.
 	 */
 	private void mostrarVentanaCarrito() {
-	    JFrame ventanaCarrito = new JFrame("Carrito de Compra");
-	    ventanaCarrito.setSize(400, 300);
-	    ventanaCarrito.setLayout(new BorderLayout());
+		JFrame ventanaCarrito = new JFrame("Carrito de Compra");
+		ventanaCarrito.setSize(400, 300);
+		ventanaCarrito.setLayout(new BorderLayout());
 
-	    JPanel panelProductos = new JPanel();
-	    panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
+		JPanel panelProductos = new JPanel();
+		panelProductos.setLayout(new BoxLayout(panelProductos, BoxLayout.Y_AXIS));
 
-	    // Mostrar los productos del carrito directamente en la ventana emergente
-	    for (Producto producto : productosEnCarrito) {
-	        // Etiqueta para mostrar el nombre y la cantidad del producto
-	        JLabel lblProducto = new JLabel(producto.getNombre() + " - Cantidad: " + producto.getCantidadEnStock());
+		// Mostrar los productos del carrito directamente en la ventana emergente
+		for (Producto producto : productosEnCarrito) {
+			// Etiqueta para mostrar el nombre y la cantidad del producto
+			JLabel lblProducto = new JLabel(producto.getNombre() + " - Cantidad: " + producto.getCantidadEnStock());
 
-	        // Panel para organizar la etiqueta del producto y los botones de añadir y eliminar
-	        JPanel panelProducto = new JPanel(new BorderLayout());
-	        panelProducto.add(lblProducto, BorderLayout.CENTER);
+			// Panel para organizar la etiqueta del producto y los botones de añadir y eliminar
+			JPanel panelProducto = new JPanel(new BorderLayout());
+			panelProducto.add(lblProducto, BorderLayout.CENTER);
 
-	        // Botón para decrementar la cantidad del producto en el carrito
-	        JButton btnEliminar = new JButton("-");
-	        btnEliminar.addActionListener(new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	                quitarDelCarrito(producto);
-	                ventanaCarrito.dispose();
-	                mostrarVentanaCarrito();
-	            }
-	        });
-	        panelProducto.add(btnEliminar, BorderLayout.EAST);
+			// Botón para decrementar la cantidad del producto en el carrito
+			JButton btnEliminar = new JButton("-");
+			btnEliminar.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					quitarDelCarrito(producto);
+					ventanaCarrito.dispose();
+					mostrarVentanaCarrito();
+				}
+			});
+			panelProducto.add(btnEliminar, BorderLayout.EAST);
 
-	        panelProductos.add(panelProducto);
-	    }
+			panelProductos.add(panelProducto);
+		}
 
-	    ventanaCarrito.add(panelProductos, BorderLayout.CENTER);
-	    ventanaCarrito.setVisible(true);
+		// Botón de compra en la parte inferior
+		JButton btnRealizarCompra = new JButton("Realizar Compra");
+		btnRealizarCompra.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Lógica para realizar la compra con los productos en el carrito
+				realizarCompra();
+				ventanaCarrito.dispose();
+			}
+		});
+		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		panelBotones.add(btnRealizarCompra);
+
+		ventanaCarrito.add(panelBotones, BorderLayout.SOUTH);
+		ventanaCarrito.add(panelProductos, BorderLayout.CENTER);
+		ventanaCarrito.setVisible(true);
 	}
 
 	/**
@@ -393,8 +429,13 @@ public class InterfazTiendaOnline extends JFrame {
 		btnCompra.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Lógica para realizar la compra (puede actualizar el stock, generar factura, etc.)
-				JOptionPane.showMessageDialog(null, "Compra realizada: " + producto.getNombre());
+				if (usuarioSesion != null) {
+					realizarCompra();
+					ventanaDetalles.dispose();
+					JOptionPane.showMessageDialog(null, "Compra realizada: " + producto.getNombre());
+				} else {
+					JOptionPane.showMessageDialog(null, "Debe iniciar sesión para realizar la compra.");
+				}
 			}
 		});
 
@@ -433,6 +474,78 @@ public class InterfazTiendaOnline extends JFrame {
 	private void quitarDelCarrito(Producto producto) {
 		productosEnCarrito.remove(producto);
 		JOptionPane.showMessageDialog(null, "Producto eliminado del carrito: " + producto.getNombre());
+	}
+
+	//Queda añadir las opciones para pagar y SQL.
+	/**
+	 * Método para realizar la compra utilizando el carrito de compras y un método de pago.
+	 */
+	private void realizarCompra() {
+		// Verifica si hay un usuario en sesión
+		if (usuarioSesion == null) {
+			JOptionPane.showMessageDialog(null, "Debe iniciar sesión para realizar la compra.");
+			return;
+		}
+
+		// Verifica si hay productos en el carrito
+		if (productosEnCarrito.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "El carrito de compras está vacío. Agregue productos antes de comprar.");
+			return;
+		}
+
+		// Pide al usuario seleccionar un método de pago
+		String[] opcionesPago = {"Tarjeta de Crédito"};
+		String metodoPagoSeleccionado = (String) JOptionPane.showInputDialog(
+				null,
+				"Seleccione un método de pago:",
+				"Método de Pago",
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				opcionesPago,
+				opcionesPago[0]);
+
+		// Procesa el pago según el método seleccionado
+		Pago metodoPago;
+		switch (metodoPagoSeleccionado) {
+		case "Tarjeta de Crédito":
+			metodoPago = obtenerDatosPagoTarjeta(); 
+			break;
+
+		default:
+			JOptionPane.showMessageDialog(null, "Método de pago no válido.");
+			return;
+		}
+
+		// Completa la compra utilizando el carrito y el método de pago seleccionado
+		Compra compra = new Compra();
+		compra.completarCompra(new carritoCompra(), metodoPago);
+
+		// Limpia el carrito después de la compra
+		productosEnCarrito.clear();
+
+		// Muestra un mensaje indicando que la compra fue exitosa
+		JOptionPane.showMessageDialog(null, "Compra realizada exitosamente.");
+	}
+
+	/**
+	 * Método para obtener los datos de la tarjeta de crédito.
+	 *
+	 * @return Una instancia de pagoTarjeta con los datos de la tarjeta.
+	 */
+	private Pago obtenerDatosPagoTarjeta() {
+		// Pide al usuario ingresar los datos de la tarjeta
+		String numeroTarjeta = JOptionPane.showInputDialog("Ingrese el número de la tarjeta de crédito:");
+		String fechaVencimiento = JOptionPane.showInputDialog("Ingrese la fecha de vencimiento (MM/YY):");
+		String codigoSeguridadStr = JOptionPane.showInputDialog("Ingrese el código de seguridad:");
+
+		int codigoSeguridad = 0;
+		try {
+			codigoSeguridad = Integer.parseInt(codigoSeguridadStr);
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Error: El código de seguridad debe ser un número entero.");
+		}
+
+		return new pagoTarjeta(numeroTarjeta, fechaVencimiento, codigoSeguridad);
 	}
 
 
