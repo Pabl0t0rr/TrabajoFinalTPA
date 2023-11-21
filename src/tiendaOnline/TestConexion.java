@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class TestCOnexion {
+public class TestConexion {
 	public static void main(String[] args) {
 		Conexion conexion = new Conexion();
 		Connection cn = null;
