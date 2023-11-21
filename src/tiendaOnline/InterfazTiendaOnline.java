@@ -43,35 +43,35 @@ public class InterfazTiendaOnline extends JFrame {
 		Producto pcPremontado1 = new PCPremontado("PC Gaming", 800.0, 7, "PC con buen rendimiento, para trabajar en casa");		
 		listaProductos.add(pcPremontado);
 		listaProductos.add(pcPremontado1);
-		
+
 		//Procesadores
 		Producto cpu = new Pieza("Procesador Intel Core i7", 300.0, 10, "Procesador potente para rendimiento");
 		Producto cpu1 = new Pieza("Procesador Intel Core i5", 150.0, 10, "Procesador de potencia media");
 		listaProductos.add(cpu);
 		listaProductos.add(cpu1);
-		
+
 		/*
 		//Placa Base
 		Producto Pb = new Pieza("Placa Base",  300.0,7,"MSI MPG B550 GAMING PLUS");
 		Producto Pb1 = new Pieza("Placa Base",  300.0,7,"ASUS ROG STRIX Z790-F GAMING WIFI");
 		listaProductos.add(Pb);
 		listaProductos.add(Pb1);
-		
+
 		//RAM
 		Producto RAM = new Pieza("RAM con RGB", 300.0, 10, "Corsair Vengeance RGB DDR5 6000MHz PC5-48000 32GB 2x16GB CL36 Negra");
 		Producto RAM1 = new Pieza("RAM", 150.0, 10, "Kingston FURY Beast DDR4 3200 MHz 16GB 2x8GB CL16");
 		listaProductos.add(RAM);
 		listaProductos.add(RAM1);
-		
+
 		//Graficas
 		Producto grafica = new Pieza("Procesador Intel Core i7", 300.0, 10, "MSI GeForce RTX 4080 VENTUS 3X E OC 16GB GDDR6X DLSS3");
 		Producto grafica1 = new Pieza("Procesador Intel Core i5", 150.0, 10, "MSI AMD Radeon RX 6650 XT GAMING X 8GB GDDR6");
 		listaProductos.add(grafica);
 		listaProductos.add(grafica1);
-		
+
 		//
-		*/
-		
+		 */
+
 		setTitle("www.Computer-tech.com");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -292,34 +292,17 @@ public class InterfazTiendaOnline extends JFrame {
 	 * @param nombreUsuario El nombre de usuario a registrar.
 	 * @param contrasena    La contraseña del nuevo usuario.
 	 */
-	private void registrarUsuario(String nombreUsuario, String contrasena) {
-		Usuario nuevoUsuario = new Usuario(nombreUsuario, contrasena);
-		almacenamientoUsuario.agregarUsuario(nuevoUsuario);
-		JOptionPane.showMessageDialog(null, "¡Usuario registrado exitosamente!");
+	private void registrarUsuario(String usuario, String contrasena) {
+		Usuario nuevoUsuario = new Usuario(usuario, contrasena);
+		try {
+			almacenamientoUsuario.registroUsuario(nuevoUsuario);
+			JOptionPane.showMessageDialog(null, "Registro exitoso");
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error al registrar el usuario. Por favor, inténtelo nuevamente.");
+			e.printStackTrace();
+		}
 	}
-	
-	/**
-	 * Registra un nuevo usuario con el nombre de usuario y contraseña dados en la base de datos.
-	 *
-	 * @param nombreUsuario El nombre de usuario a registrar.
-	 * @param contrasena    La contraseña del nuevo usuario.
-	 */
-	private void registrarUsuarioEnBD(String nombreUsuario, String contrasena) {
-	    // Utiliza la conexión a la base de datos para registrar el usuario
-	    try (Connection conexion = new Conexion().conectar())  {
-	        String consulta = "INSERT INTO usuarios (nombre_usuario, contrasena) VALUES (?, ?)";
-	        try (PreparedStatement pstmt = conexion.prepareStatement(consulta)) {
-	            pstmt.setString(1, nombreUsuario);
-	            pstmt.setString(2, contrasena);
-	            pstmt.executeUpdate();
-	        }
-	        JOptionPane.showMessageDialog(null, "¡Usuario registrado exitosamente!");
-	    } catch (SQLException ex) {
-	        ex.printStackTrace();  // Imprimir detalles de la excepción en la consola
-	        JOptionPane.showMessageDialog(null, "Error al registrar el usuario en la base de datos.");
-	    }
-	}
-	
+
 	/**
 	 * Muestra una ventana con el contenido del carrito de compras.
 	 */
@@ -573,5 +556,5 @@ public class InterfazTiendaOnline extends JFrame {
 		return new pagoTarjeta(numeroTarjeta, fechaVencimiento, codigoSeguridad);
 	}
 
-	
+
 }
