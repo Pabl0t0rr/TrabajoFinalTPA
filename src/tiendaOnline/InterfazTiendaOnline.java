@@ -211,14 +211,18 @@ public class InterfazTiendaOnline extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String nombreUsuario = txtUsuario.getText();
 				String contrasena = new String(txtContrasena.getPassword());
-				usuarioSesion = almacenamientoUsuario.buscarUsuario(nombreUsuario);
 
-				if (usuarioSesion != null && usuarioSesion.getContrasena().equals(contrasena)) {
-					JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso para el usuario " + nombreUsuario + "!");
-					frameInicioSesion.dispose();
-
-				} else {
-					JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos. Inicio de sesión fallido.");
+				try {
+					if (almacenamientoUsuario.iniciarSesion(nombreUsuario, contrasena)) {
+						JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso para el usuario " + nombreUsuario + "!");
+						frameInicioSesion.dispose();
+						// Puedes realizar otras acciones después de un inicio de sesión exitoso
+					} else {
+						JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos. Inicio de sesión fallido.");
+					}
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error al intentar iniciar sesión. Por favor, inténtelo nuevamente.");
 				}
 			}
 		});
@@ -226,7 +230,7 @@ public class InterfazTiendaOnline extends JFrame {
 		JButton btnRegistrarse = new JButton("Registrarse");
 		btnRegistrarse.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e){
+			public void actionPerformed(ActionEvent e) {
 				frameInicioSesion.dispose();
 				mostrarVentanaRegistro();
 			}
@@ -245,7 +249,6 @@ public class InterfazTiendaOnline extends JFrame {
 		frameInicioSesion.add(panelInicioSesion);
 		frameInicioSesion.setVisible(true);
 	}
-
 	/**
 	 * Muestra una ventana para el registro de un nuevo usuario.
 	 */
@@ -484,7 +487,6 @@ public class InterfazTiendaOnline extends JFrame {
 		JOptionPane.showMessageDialog(null, "Producto eliminado del carrito: " + producto.getNombre());
 	}
 
-	//Queda añadir las opciones para pagar y SQL.
 	/**
 	 * Método para realizar la compra utilizando el carrito de compras y un método de pago.
 	 */

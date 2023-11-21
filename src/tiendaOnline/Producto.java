@@ -47,6 +47,7 @@ public class Producto {
 	public String getCategoria() {
 		return categoria;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
@@ -94,13 +95,13 @@ public class Producto {
 	 * Muestra la información del producto por consola.
 	 */
 	public void mostrarInformacion() {
-        // Lógica para mostrar información del producto
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Precio: " + precio);
-        System.out.println("Stock: " + cantidadEnStock);
-        System.out.println("Descripción: " + descripcion);
-        System.out.println("Categoría: " + categoria);
-    }
+		// Lógica para mostrar información del producto
+		System.out.println("Nombre: " + nombre);
+		System.out.println("Precio: " + precio);
+		System.out.println("Stock: " + cantidadEnStock);
+		System.out.println("Descripción: " + descripcion);
+		System.out.println("Categoría: " + categoria);
+	}
 
 	/**
 	 * Busca una palabra clave en el nombre del producto.
@@ -113,5 +114,14 @@ public class Producto {
 			return true;
 		}
 		return false;
+	}
+
+	public void reducirStock(int cantidad) {
+	    if (cantidadEnStock >= cantidad) {
+	        cantidadEnStock -= cantidad;
+	    } else {
+	        // Puedes manejar esto de acuerdo a tus necesidades, como lanzar una excepción o mostrar un mensaje de error.
+	        System.out.println("No hay suficiente stock disponible para reducir.");
+	    }
 	}
 }

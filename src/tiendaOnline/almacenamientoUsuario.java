@@ -1,11 +1,12 @@
 package tiendaOnline;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * La clase almacenamientoUsuario gestiona el almacenamiento y recuperación de usuarios en la tienda online.
@@ -61,6 +62,48 @@ public class almacenamientoUsuario implements Serializable {
             }
         }
         return null; // Si no se encuentra el usuario
+    }
+    
+    /**
+     * Verifica las credenciales para iniciar sesión.
+     *
+     * @param nombreUsuario El nombre de usuario.
+     * @param contrasena    La contraseña.
+     * @return True si las credenciales son válidas, False en caso contrario.
+     * @throws SQLException Si hay un error en la consulta SQL.
+     */
+    public static boolean iniciarSesion(String nombreUsuario, String contrasena) throws SQLException {
+        Connection conexion = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            Conexion gestorConexion = new Conexion();
+            conexion = gestorConexion.conectar();
+
+            // Preparar la consulta SQL para verificar las credenciales
+            String sql = "SELECT * FROM usuario WHERE usuario = ? AND clave = ?";
+            pstmt = conexion.prepareStatement(sql);
+            pstmt.setString(1, nombreUsuario);
+            pstmt.setString(2, contrasena);
+
+            // Ejecutar la consulta
+            rs = pstmt.executeQuery();
+
+            // Verificar si se encontraron resultados
+            return rs.next();
+        } finally {
+            // Cerrar recursos
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conexion != null) {
+                conexion.close();
+            }
+        }
     }
     
     /**
