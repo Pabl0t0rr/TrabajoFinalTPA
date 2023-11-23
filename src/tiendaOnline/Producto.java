@@ -116,12 +116,4 @@ public class Producto {
 		return false;
 	}
 
-	public void reducirStock(int cantidad) {
-	    if (cantidadEnStock >= cantidad) {
-	        cantidadEnStock -= cantidad;
-	    } else {
-	        // Puedes manejar esto de acuerdo a tus necesidades, como lanzar una excepción o mostrar un mensaje de error.
-	        System.out.println("No hay suficiente stock disponible para reducir.");
-	    }
-	}
 }

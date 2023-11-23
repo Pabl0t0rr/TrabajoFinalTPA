@@ -446,6 +446,7 @@ public class InterfazTiendaOnline extends JFrame {
 					JOptionPane.showMessageDialog(null, "Compra realizada: " + producto.getNombre());
 				} else {
 					JOptionPane.showMessageDialog(null, "Debe iniciar sesión para realizar la compra.");
+					mostrarVentanaInicioSesion();
 				}
 			}
 		});
