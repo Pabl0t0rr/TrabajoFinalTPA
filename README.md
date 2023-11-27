@@ -12,12 +12,13 @@ Tienda online llamada Components Tech
 2. Opción de iniciar sesion y registrarte.
 3. Poder ver lo que tengas en el carrito por si lo quieres comprar.
 4. Buscador de productos.
+5. Los productos.
 
 Queda por añadir:
 
-1. Los productos.
-2. Opcion de atencion al cliente.
-3. Teléfono de contacto.
+1. Opcion de atencion al cliente.
+2. Teléfono de contacto.
+3. Opción ver estado pedido
 
 ## Diagrama UML
 ```mermaid
