@@ -1,6 +1,5 @@
 package tiendaOnline;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * La clase almacenamientoUsuario gestiona el almacenamiento y recuperación de usuarios en la tienda online.
  */
-public class almacenamientoUsuario implements Serializable {
+public class almacenamientoUsuario {
 	
     private static List<Usuario> listaUsuarios = new ArrayList<>();
 

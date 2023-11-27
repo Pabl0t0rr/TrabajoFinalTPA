@@ -15,17 +15,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
  * La clase InterfazTiendaOnline representa la interfaz de la tienda online.
  */
 public class InterfazTiendaOnline extends JFrame {
-
-	// Declaraciones de variables y componentes de la interfaz
-	private Usuario usuarioSesion;
 	private JPanel panelCarrito;
 	private List<Producto> listaProductos;
 	private List<Producto> productosEnCarrito = new ArrayList<>();
@@ -216,7 +211,6 @@ public class InterfazTiendaOnline extends JFrame {
 					if (almacenamientoUsuario.iniciarSesion(nombreUsuario, contrasena)) {
 						JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso para el usuario " + nombreUsuario + "!");
 						frameInicioSesion.dispose();
-						// Puedes realizar otras acciones después de un inicio de sesión exitoso
 					} else {
 						JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos. Inicio de sesión fallido.");
 					}
@@ -249,6 +243,7 @@ public class InterfazTiendaOnline extends JFrame {
 		frameInicioSesion.add(panelInicioSesion);
 		frameInicioSesion.setVisible(true);
 	}
+
 	/**
 	 * Muestra una ventana para el registro de un nuevo usuario.
 	 */
@@ -347,8 +342,14 @@ public class InterfazTiendaOnline extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Lógica para realizar la compra con los productos en el carrito
-				realizarCompra();
-				ventanaCarrito.dispose();
+				// Verifica si hay productos en el carrito
+				if (productosEnCarrito.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "El carrito de compras está vacío. Agregue productos antes de comprar.");
+					return;
+				}else {			    	
+					realizarCompra();
+					ventanaCarrito.dispose();
+				}				
 			}
 		});
 		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -440,14 +441,9 @@ public class InterfazTiendaOnline extends JFrame {
 		btnCompra.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (usuarioSesion != null) {
-					realizarCompra();
-					ventanaDetalles.dispose();
-					JOptionPane.showMessageDialog(null, "Compra realizada: " + producto.getNombre());
-				} else {
-					JOptionPane.showMessageDialog(null, "Debe iniciar sesión para realizar la compra.");
-					mostrarVentanaInicioSesion();
-				}
+				realizarCompra();
+				ventanaDetalles.dispose();
+				JOptionPane.showMessageDialog(null, "Compra realizada: " + producto.getNombre());
 			}
 		});
 
@@ -492,17 +488,6 @@ public class InterfazTiendaOnline extends JFrame {
 	 * Método para realizar la compra utilizando el carrito de compras y un método de pago.
 	 */
 	private void realizarCompra() {
-		// Verifica si hay un usuario en sesión
-		if (usuarioSesion == null) {
-			JOptionPane.showMessageDialog(null, "Debe iniciar sesión para realizar la compra.");
-			return;
-		}
-
-		// Verifica si hay productos en el carrito
-		if (productosEnCarrito.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "El carrito de compras está vacío. Agregue productos antes de comprar.");
-			return;
-		}
 
 		// Pide al usuario seleccionar un método de pago
 		String[] opcionesPago = {"Tarjeta de Crédito"};
@@ -519,7 +504,7 @@ public class InterfazTiendaOnline extends JFrame {
 		Pago metodoPago;
 		switch (metodoPagoSeleccionado) {
 		case "Tarjeta de Crédito":
-			metodoPago = obtenerDatosPagoTarjeta(); 
+			metodoPago = obtenerDatosPagoTarjeta();
 			break;
 
 		default:
