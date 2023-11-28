@@ -1,9 +1,5 @@
 package tiendaOnline;
 
-public interface EstrategiaDescuento {
-    double aplicarDescuento(double precioOriginal);
-}
-
 // Implementación con descuento fijo
 class DescuentoFijo implements EstrategiaDescuento {
     private double porcentajeDescuento;
