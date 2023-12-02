@@ -27,22 +27,22 @@ Queda por añadir:
 
 classDiagram
     class almacenamientoUsuario {
-        - listaUsuarios: List<Usuario>
-        + almacenamientoUsuario()
-        + agregarUsuario(usuario: Usuario): void
-        + buscarUsuario(nombreUsuario: String): Usuario
-    }
+    - listaUsuarios: List<Usuario>
+    + getListaUsuarios(): List<Usuario>
+    + setListaUsuarios(usuarios: List<Usuario>): void
+    + agregarUsuario(usuario: Usuario): void
+    + buscarUsuario(nombreUsuario: String): Usuario
+    + iniciarSesion(nombreUsuario: String, contrasena: String): boolean
+    + registroUsuario(usuario: Usuario): void
+  }
 
     class carritoCompra {
-        - productosEnCarrito: ArrayList<Producto>
-        + getProductosCarrito(): ArrayList<Producto>
-        + agregarProducto(producto: Producto): void
-        + eliminarProducto(producto: Producto): void
-        + calcularCostoTotal(): double
-        + verEstadoPedido(): void
-        + actualizarEstadoPedido(numeroPedido: int, nuevoEstado: String): void
-        + verificarDisponibilidadProducto(producto: Producto): boolean
-    }
+    - productosEnCarrito: ArrayList<Producto>
+    + getProductosCarrito(): ArrayList<Producto>
+    + agregarProducto(producto: Producto): void
+    + eliminarProducto(producto: Producto): void
+    + calcularCostoTotal(): double
+  }
 
     class Compra {
         + completarCompra(carrito: carritoCompra, metodoPago: Pago): void
@@ -52,29 +52,36 @@ classDiagram
         + procesarPago(): void
     }
 
-    class pagoTarjeta {
-        - numeroTarjeta: String
-        - fechaVencimiento: String
-        - codigoSeguridad: int
-        + pagoTarjeta(numeroTarjeta: String, fechaVencimiento: String, codigoSeguridad: int)
-        + validarTarjeta(): boolean
-        + fechaVencimientoValida(fechaVencimiento: String): boolean
-        + procesarPago(): void
-    }
+   class pagoTarjeta {
+    - numeroTarjeta: String
+    - fechaVencimiento: String
+    - codigoSeguridad: int
+    - validarTarjeta(): boolean
+    - fechaVencimientoValida(fechaVencimiento: String): boolean
+    + procesarPago(): void
+  }
 
     class Producto {
-        - nombre: String
-        - precio: double
-        - cantidadEnStock: int
-        - descripcion: String
-        -categoria: String
-        + Producto(nombre: String, precio: double, cantidadEnStock: int, descripcion: String,categoria: String)
-        + agregarStock(cantidad: int): void
-        + restarStock(cantidad: int): void
-        + actualizarPrecio(nuevoPrecio: double): void
-        + mostrarInformacion(): void
-        + buscarPorPalabra(palabraBuscada: String): boolean
-    }
+    - nombre: String
+    - precio: double
+    - cantidadEnStock: int
+    - descripcion: String
+    - categoria: String
+    + getNombre(): String
+    + getPrecio(): double
+    + getCantidadEnStock(): int
+    + getDescripcion(): String
+    + getCategoria(): String
+    + setNombre(nombre: String): void
+    + setPrecio(precio: double): void
+    + setCantidadEnStock(cantidadEnStock: int): void
+    + setDescripcion(descripcion: String): void
+    + agregarStock(cantidad: int): void
+    + restarStock(cantidad: int): void
+    + actualizarPrecio(nuevoPrecio: double): void
+    + mostrarInformacion(): void
+    + buscarPorPalabra(palabraBuscada: String): boolean
+  }
 
     class seguimientoPedido {
         + verEstadoPedido(): void
@@ -83,10 +90,13 @@ classDiagram
     }
 
     class Usuario {
-        - nombreUsuario: String
-        - contrasena: String
-        + Usuario(nombreUsuario: String, contrasena: String)
-    }
+    - nombreUsuario: String
+    - contrasena: String
+    + getNombreUsuario(): String
+    + setNombreUsuario(nombreUsuario: String): void
+    + getContrasena(): String
+    + setContrasena(contrasena: String): void
+  }
 
     class PCPremontado{
         +PCPremontado(String nombre, double precio, int stock, String descripcion)
