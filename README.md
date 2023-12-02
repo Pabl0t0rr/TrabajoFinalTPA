@@ -19,6 +19,9 @@ Queda por añadir:
 2. Opcion de atencion al cliente.
 3. Teléfono de contacto.
 
+## Patrón de diseño usado
+-Diseño observer
+
 ## Diagrama UML
 ```mermaid
 
