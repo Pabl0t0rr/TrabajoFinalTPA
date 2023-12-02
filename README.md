@@ -1,6 +1,4 @@
-# TrabajoFinalTPA
-
-Tienda online llamada Components Tech
+# Components Tech
 
 ## Desarrolladores
 - Pedro Zuñeda Diego
