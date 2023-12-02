@@ -10,6 +10,7 @@
 2. Opción de iniciar sesion y registrarte.
 3. Poder ver lo que tengas en el carrito por si lo quieres comprar.
 4. Buscador de productos.
+5. Método de pago(Trajeta de crédito).
 
 Queda por añadir:
 
