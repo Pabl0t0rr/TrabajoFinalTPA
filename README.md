@@ -20,6 +20,29 @@ Queda por añadir:
 ## Patrón de diseño usado
 -Diseño observer
 
+```mermaid
+classDiagram
+  class Observador {
+    +actualizar(String mensaje)
+  }
+
+  class SujetoObservable {
+    -observadores: List<Observador>
+    +agregarObservador(Observador observador)
+    +quitarObservador(Observador observador)
+    #notificarObservadores(String mensaje)
+  }
+
+  class UsuarioNotificacion {
+    -nombreUsuario: String
+    +UsuarioNotificacion(String nombreUsuario)
+    +actualizar(String mensaje)
+  }
+
+  Observador <|-- UsuarioNotificacion
+  SujetoObservable *-- Observador : contiene
+```
+
 ## Diagrama UML
 ```mermaid
 
