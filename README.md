@@ -11,12 +11,12 @@
 3. Poder ver lo que tengas en el carrito por si lo quieres comprar.
 4. Buscador de productos.
 5. Método de pago(Trajeta de crédito).
+6. Opcion de atencion al cliente.
+7. Teléfono de contacto.
 
 Queda por añadir:
 
 1. Los productos.
-2. Opcion de atencion al cliente.
-3. Teléfono de contacto.
 
 ## Patrón de diseño Observer
 
